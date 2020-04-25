@@ -42,7 +42,7 @@ class SiteController extends Controller
             [
                 'model' => $model,
                 'isAdmin' => $this->getIsAdmin(),
-                'sort' => $this->getParam('sort'),
+                'sort' => $this->getSort(),
                 'page' => (int) $this->getParam('page', 1),
                 'pageSize' => 3,
                 'flash' => $this->getFlash(),
@@ -124,5 +124,22 @@ class SiteController extends Controller
         session_unset();
         header("Location: /");
         exit();
+    }
+
+    protected function getSort()
+    {
+        $availableSorts = [
+            'user_name ASC',
+            'user_name DESC',
+            'email ASC',
+            'email DESC',
+            'flag ASC',
+            'flag DESC',
+        ];
+        $sort = $this->getParam('sort');
+        if (!in_array($sort, $availableSorts)) {
+            return 'id DESC';
+        }
+        return $sort;
     }
 }
